@@ -1,21 +1,61 @@
+import sys
 import time
 
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 
-chrome_browser = webdriver.Chrome(
-    executable_path='/Users/akhileshsingh/Desktop/Drivers/chromedriver') # Change the path as per your local dir.
-chrome_browser.get('https://web.whatsapp.com/')
 
-time.sleep(15)
+# Function for getting user from contacts
+def new_chat(user_name):
+    # Selecting the new chat search textbox
+    new_chat = chrome_browser.find_element_by_xpath('//div[@class="ZP8RM"]')
+    new_chat.click()
 
-user_name_list = ['WhatsApp Bot', 'My']
+    # Enter the name of chat
+    new_user = chrome_browser.find_element_by_xpath('//div[@class="_3u328 copyable-text selectable-text"]')
+    new_user.send_keys(user_name)
 
-for user_name in user_name_list:
-    user = chrome_browser.find_element_by_xpath('//span[@title="{}"]'.format(user_name))
-    user.click()
+    time.sleep(1)
 
-    message_box = chrome_browser.find_element_by_xpath('//div[@class="_13mgZ"]')
-    message_box.send_keys('Hey, I am your whatsapp bot')
+    try:
+        # Select for the title having user name
+        user = chrome_browser.find_element_by_xpath('//span[@title="{}"]'.format(user_name))
+        user.click()
+    except NoSuchElementException:
+        print('Given user "{}" not found in the contact list'.format(user_name))
+    except Exception as e:
+        # Close the browser
+        chrome_browser.close()
+        print(e)
+        sys.exit()
 
-    message_box = chrome_browser.find_element_by_xpath('//button[@class="_3M-N-"]')
-    message_box.click()
+
+if __name__ == '__main__':
+
+    # Register the drive
+    chrome_browser = webdriver.Chrome(executable_path='{}')  # Change the path as per your local dir.
+    chrome_browser.get('https://web.whatsapp.com/')
+
+    # Sleep to scan the QR Code
+    time.sleep(15)
+
+    user_name_list = ['']  # Having list of user names
+
+    for user_name in user_name_list:
+
+        try:
+            # Select for the title having user name
+            user = chrome_browser.find_element_by_xpath('//span[@title="{}"]'.format(user_name))
+            user.click()
+        except NoSuchElementException as se:
+            new_chat(user_name)
+
+        # Typing message into message box
+        message_box = chrome_browser.find_element_by_xpath('//div[@class="_13mgZ"]')
+        message_box.send_keys('Hey, I am your whatsapp bot')
+
+        # Click on send button
+        message_box = chrome_browser.find_element_by_xpath('//button[@class="_3M-N-"]')
+        message_box.click()
+
+    chrome_browser.close()
