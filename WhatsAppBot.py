@@ -3,7 +3,7 @@ import time
 from selenium import webdriver
 
 chrome_browser = webdriver.Chrome(
-    executable_path='/Users/akhileshsingh/Desktop/Drivers/chromedriver')
+    executable_path='/Users/akhileshsingh/Desktop/Drivers/chromedriver') # Change the path as per your local dir.
 chrome_browser.get('https://web.whatsapp.com/')
 
 time.sleep(15)
