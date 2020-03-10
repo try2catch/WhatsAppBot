@@ -5,7 +5,7 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 
 
-# Function for getting user from contacts
+# Function for getting user from
 def new_chat(user_name):
     # Selecting the new chat search textbox
     new_chat = chrome_browser.find_element_by_xpath('//div[@class="ZP8RM"]')
@@ -32,14 +32,19 @@ def new_chat(user_name):
 
 if __name__ == '__main__':
 
+    options = webdriver.ChromeOptions()
+    options.add_argument('--user-data-dir=<User Data Path>')
+    options.add_argument('--profile-directory=Default')
+
     # Register the drive
-    chrome_browser = webdriver.Chrome(executable_path='{}')  # Change the path as per your local dir.
+    chrome_browser = webdriver.Chrome(executable_path='<Driver Path>',
+                                      options=options)  # Change the path as per your local dir.
     chrome_browser.get('https://web.whatsapp.com/')
 
     # Sleep to scan the QR Code
     time.sleep(15)
 
-    user_name_list = ['']  # Having list of user names
+    user_name_list = ['']
 
     for user_name in user_name_list:
 
